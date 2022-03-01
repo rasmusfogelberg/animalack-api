@@ -1,0 +1,6 @@
+# .NET compiled files
+bin
+obj
+
+# Ignore working files
+TODO.md

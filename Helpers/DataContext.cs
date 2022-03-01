@@ -1,21 +1,20 @@
-using AnimalackApI.Entities;
+using AnimalackApi.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
-namespace Anmialack.Helpers;
+namespace AnmialackApi.Helpers;
 
-public class DataContext: DbContext
+public class DataContext : DbContext
 {
- public DbSet<User> Users {get; set;}
- private readonly IConfiguration Configuration;
+  public DbSet<User> Users { get; set; }
+  private readonly IConfiguration Configuration;
 
   public DataContext(IConfiguration configuration)
   {
     Configuration = configuration;
   }
-    protected override void OnConfiguring(DbContextOptionsBuilder options)
-    {
-        options.UseSqlServer(Configuration.GetConnectionString("AnimalackApiDatabase"));
-    }
+  protected override void OnConfiguring(DbContextOptionsBuilder options)
+  {
+    options.UseSqlServer(Configuration.GetConnectionString("AnimalackApiDatabase"));
+  }
 
 }

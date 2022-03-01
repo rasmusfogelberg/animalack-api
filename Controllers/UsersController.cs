@@ -5,39 +5,42 @@ using Microsoft.EntityFrameworkCore;
 
 using AnimalackApi.Entities;
 using AnmialackApi.Helpers;
+using AnimalackApi.Services;
+using AnimalackApi.Models.Users;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController : ControllerBase
+public class UsersController : ControllerBase
 {
-  private readonly DataContext _context;
+  private readonly IUserService _userService;
 
-  public UserController(DataContext context)
+  public UsersController(IUserService userService)
   {
-    _context = context;
+    _userService = userService;
   }
 
   // GET: api/User
   [HttpGet]
-  public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+  public ActionResult<IEnumerable<User>> GetUsers()
   {
-    return await _context.Users.ToListAsync();
+    var users = _userService.GetAll();
+    return Ok(users);
   }
 
   // GET: api/User/5
   [HttpGet("{id}")]
-  public async Task<ActionResult<User>> GetUser(int id)
+  public ActionResult<User> GetUser(int id)
   {
-    var user = await _context.Users.FindAsync(id);
+    var user = _userService.GetById(id);
 
     if (user == null)
     {
       return NotFound();
     }
 
-    return user;
+    return Ok(user);
   }
-
+/* 
   // PUT: api/User/5
   // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
   [HttpPut("{id}")]
@@ -67,19 +70,17 @@ public class UserController : ControllerBase
     }
 
     return NoContent();
-  }
+  }*/
 
-  // POST: api/User
-  // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-  [HttpPost]
-  public async Task<ActionResult<User>> PostUser(User user)
+  [HttpPost("register")]
+  public IActionResult Register(RegisterRequest model)
   {
-    _context.Users.Add(user);
-    await _context.SaveChangesAsync();
+    _userService.Register(model, Request.Headers["origin"]);
 
-    return CreatedAtAction("GetUser", new { id = user.Id }, user);
+    return Ok(new {message = "User successfully registered!"});
   }
 
+/*
   // DELETE: api/User/5
   [HttpDelete("{id}")]
   public async Task<IActionResult> DeleteUser(int id)
@@ -99,6 +100,6 @@ public class UserController : ControllerBase
   private bool UserExists(int id)
   {
     return _context.Users.Any(e => e.Id == id);
-  }
+  } */
 }
 

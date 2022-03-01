@@ -1,19 +1,30 @@
+using AnimalackApi.Services;
+using AnmialackApi.Helpers;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+{
+  var services = builder.Services;
+  var env = builder.Environment;
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+  services.AddDbContext<DataContext>();
+  services.AddCors();
+  services.AddControllers();
+  services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+  services.AddSwaggerGen();
+  services.AddEndpointsApiExplorer();
+
+  services.AddScoped<IUserService,UserService>();
+}
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+  app.UseSwagger();
+  app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();

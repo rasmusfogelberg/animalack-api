@@ -40,66 +40,69 @@ public class UsersController : ControllerBase
 
     return Ok(user);
   }
-/* 
-  // PUT: api/User/5
-  // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-  [HttpPut("{id}")]
-  public async Task<IActionResult> PutUser(int id, User user)
-  {
-    if (id != user.Id)
+  /* 
+    // PUT: api/User/5
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPut("{id}")]
+    public async Task<IActionResult> PutUser(int id, User user)
     {
-      return BadRequest();
-    }
-
-    _context.Entry(user).State = EntityState.Modified;
-
-    try
-    {
-      await _context.SaveChangesAsync();
-    }
-    catch (DbUpdateConcurrencyException)
-    {
-      if (!UserExists(id))
+      if (id != user.Id)
       {
-        return NotFound();
+        return BadRequest();
       }
-      else
+
+      _context.Entry(user).State = EntityState.Modified;
+
+      try
       {
-        throw;
+        await _context.SaveChangesAsync();
       }
-    }
+      catch (DbUpdateConcurrencyException)
+      {
+        if (!UserExists(id))
+        {
+          return NotFound();
+        }
+        else
+        {
+          throw;
+        }
+      }
 
-    return NoContent();
-  }*/
+      return NoContent();
+    }*/
 
+  // Register a user
   [HttpPost("register")]
   public IActionResult Register(RegisterRequest model)
   {
     _userService.Register(model, Request.Headers["origin"]);
 
-    return Ok(new {message = "User successfully registered!"});
+    return Ok(new { message = "User successfully registered!" });
   }
 
-/*
-  // DELETE: api/User/5
+  // Delete a specific User
   [HttpDelete("{id}")]
-  public async Task<IActionResult> DeleteUser(int id)
+  public IActionResult DeleteUser(int id)
   {
-    var user = await _context.Users.FindAsync(id);
-    if (user == null)
-    {
-      return NotFound();
-    }
+    // Used to have `var user` infront of this line. Did not work with void
+    _userService.DeleteById(id);
 
-    _context.Users.Remove(user);
-    await _context.SaveChangesAsync();
+    // How can I do a check if there is a user on the specific id? Or do I even need it 
+    // since there is a check in the "getUser" and "DeleteById" methods in UserService class?
+    /*    if (user == null)
+       {
+         return NotFound();
+       } */
 
-    return NoContent();
+    return Ok(new { message = "User successfully deleted!" });
   }
-
-  private bool UserExists(int id)
-  {
-    return _context.Users.Any(e => e.Id == id);
-  } */
+  
+  
+  /*
+    private bool UserExists(int id)
+    {
+      return _context.Users.Any(e => e.Id == id);
+    } */
 }
 

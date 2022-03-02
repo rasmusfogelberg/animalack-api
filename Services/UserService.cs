@@ -1,4 +1,5 @@
 using AnimalackApi.Entities;
+using AnimalackApi.Helpers;
 using AnimalackApi.Models.Users;
 using AnmialackApi.Helpers;
 using AutoMapper;
@@ -13,7 +14,10 @@ public interface IUserService
   void Register(RegisterRequest model, string origin);
   IEnumerable<UserResponse> GetAll();
   UserResponse GetById(int id);
+  UserResponse UpdateById(int id, UpdateRequest model);
   void DeleteById(int id);
+
+
 
   // Authorization
 }
@@ -68,12 +72,31 @@ public class UserService : IUserService
     // TODO: Send verification email (if there is time)
   }
 
-  // Delete a User
-  public void DeleteById(int id)
+  // Update a user
+  public UserResponse UpdateById(int id, UpdateRequest model)
   {
     var user = getUser(id);
 
-    if (user == null) throw new KeyNotFoundException("User not found");
+    // Validates and checks if email already exists
+    if (user.Username != model.Username && _context.Users.Any(user => user.Username == model.Username))
+      throw new AppException($"Email '{model.Username}' is already registered");
+
+    // Hashes the password if provided
+    if (!string.IsNullOrEmpty(model.Password))
+    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
+
+    // Copy the model to the user and then save the changes
+    _mapper.Map(model, user);
+    _context.Users.Update(user);
+    _context.SaveChanges();
+
+    return _mapper.Map<UserResponse>(user);
+  }
+
+  // Delete a user
+  public void DeleteById(int id)
+  {
+    var user = getUser(id);
 
     _context.Users.Remove(user);
     _context.SaveChanges();
@@ -89,4 +112,7 @@ public class UserService : IUserService
 
     return user;
   }
+
+
+
 }

@@ -19,7 +19,7 @@ public class UsersController : ControllerBase
     _userService = userService;
   }
 
-  // GET: api/User
+  // Get all users
   [HttpGet]
   public ActionResult<IEnumerable<User>> GetUsers()
   {
@@ -27,7 +27,7 @@ public class UsersController : ControllerBase
     return Ok(users);
   }
 
-  // GET: api/User/5
+  // Get a single user
   [HttpGet("{id}")]
   public ActionResult<User> GetUser(int id)
   {
@@ -40,37 +40,19 @@ public class UsersController : ControllerBase
 
     return Ok(user);
   }
-  /* 
-    // PUT: api/User/5
-    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutUser(int id, User user)
-    {
-      if (id != user.Id)
-      {
-        return BadRequest();
-      }
 
-      _context.Entry(user).State = EntityState.Modified;
+  // Edit a user
+  [HttpPut("{id}")]
+  public ActionResult<UserResponse> UpdateUser(int id, UpdateRequest model)
+  {
+    // Find out how I get user.Id
+    // if (id != User.Id) return Unauthorized(new { message = "Unauthorized"});
 
-      try
-      {
-        await _context.SaveChangesAsync();
-      }
-      catch (DbUpdateConcurrencyException)
-      {
-        if (!UserExists(id))
-        {
-          return NotFound();
-        }
-        else
-        {
-          throw;
-        }
-      }
 
-      return NoContent();
-    }*/
+    var user = _userService.UpdateById(id, model);
+
+    return Ok(new { message = "User successfully updated!" });
+  }
 
   // Register a user
   [HttpPost("register")]
@@ -97,8 +79,8 @@ public class UsersController : ControllerBase
 
     return Ok(new { message = "User successfully deleted!" });
   }
-  
-  
+
+
   /*
     private bool UserExists(int id)
     {

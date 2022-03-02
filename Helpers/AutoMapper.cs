@@ -10,6 +10,7 @@ public class AutoMapper : Profile
   public AutoMapper() 
   {
     CreateMap<RegisterRequest, User>();
+    CreateMap<UpdateRequest, User>();
     CreateMap<User, UserResponse>();
   }
 }

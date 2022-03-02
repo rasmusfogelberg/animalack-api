@@ -19,6 +19,15 @@ public class UsersController : ControllerBase
     _userService = userService;
   }
 
+  // Authenticate request Post
+  [HttpPost("auth")]
+  public ActionResult<AuthResponse> Auth(AuthRequest model)
+  {
+    var response = _userService.Authenticate(model);
+
+    return Ok(response);
+  }
+
   // Get all users
   [HttpGet]
   public ActionResult<IEnumerable<User>> GetUsers()

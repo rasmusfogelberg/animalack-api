@@ -10,6 +10,7 @@ public interface IUserService
 {
 
   // Authentication
+  AuthResponse Authenticate(AuthRequest model);
   void Register(RegisterRequest model, string origin);
   IEnumerable<UserResponse> GetAll();
   UserResponse GetById(int id);
@@ -32,6 +33,21 @@ public class UserService : IUserService
   {
     _context = context;
     _mapper = mapper;
+  }
+
+  // Authenticate credentials
+  public AuthResponse Authenticate(AuthRequest model)
+  {
+    var user = _context.Users.SingleOrDefault(u => u.Username == model.Username);
+
+    if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash))
+    {
+      throw new AppException("Username or Password is incorrect");
+    }
+
+    var response = _mapper.Map<AuthResponse>(user);
+    return response;
+
   }
 
   // Get all the users
@@ -82,7 +98,7 @@ public class UserService : IUserService
 
     // Hashes the password if provided
     if (!string.IsNullOrEmpty(model.Password))
-    user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
+      user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password);
 
     // Copy the model to the user and then save the changes
     _mapper.Map(model, user);

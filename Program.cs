@@ -1,5 +1,5 @@
+using AnimalackApi.Helpers;
 using AnimalackApi.Services;
-using AnmialackApi.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
   services.AddSwaggerGen();
   services.AddEndpointsApiExplorer();
 
-  services.AddScoped<IUserService,UserService>();
+  services.AddScoped<IUserService, UserService>();
 }
 
 var app = builder.Build();
@@ -26,6 +26,9 @@ if (app.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
+
+// global error handler
+app.UseMiddleware<GlobalErrorHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 using AnimalackApi.Entities;
-using AnmialackApi.Helpers;
+using AnimalackApi.Helpers;
 using AnimalackApi.Services;
 using AnimalackApi.Models.Users;
 

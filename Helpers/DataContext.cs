@@ -1,7 +1,7 @@
 using AnimalackApi.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace AnmialackApi.Helpers;
+namespace AnimalackApi.Helpers;
 
 public class DataContext : DbContext
 {

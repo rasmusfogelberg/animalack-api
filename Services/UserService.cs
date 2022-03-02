@@ -1,7 +1,6 @@
 using AnimalackApi.Entities;
 using AnimalackApi.Helpers;
 using AnimalackApi.Models.Users;
-using AnmialackApi.Helpers;
 using AutoMapper;
 using BCrypt.Net;
 

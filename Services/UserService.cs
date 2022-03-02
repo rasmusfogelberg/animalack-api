@@ -1,11 +1,13 @@
 using AnimalackApi.Entities;
 using AnimalackApi.Helpers;
+using AnimalackApi.Helpers.JWT;
 using AnimalackApi.Models.Users;
 using AutoMapper;
 using BCrypt.Net;
 
 namespace AnimalackApi.Services;
 
+// Interface
 public interface IUserService
 {
 
@@ -22,17 +24,19 @@ public interface IUserService
   // Authorization
 }
 
-// Interface
+// Class
 public class UserService : IUserService
 {
   private readonly DataContext _context;
   private readonly IMapper _mapper;
+  private readonly IJWTUtils _jwtUtils;
 
   // Constructor
-  public UserService(DataContext context, IMapper mapper)
+  public UserService(DataContext context, IMapper mapper, IJWTUtils jwtUtils)
   {
     _context = context;
     _mapper = mapper;
+    _jwtUtils = jwtUtils;
   }
 
   // Authenticate credentials
@@ -45,9 +49,12 @@ public class UserService : IUserService
       throw new AppException("Username or Password is incorrect");
     }
 
-    var response = _mapper.Map<AuthResponse>(user);
-    return response;
+    var jwtToken = _jwtUtils.GenerateToken(user);
 
+    var response = _mapper.Map<AuthResponse>(user);
+    response.JwtToken = jwtToken;
+
+    return response;
   }
 
   // Get all the users
@@ -91,10 +98,6 @@ public class UserService : IUserService
   public UserResponse UpdateById(int id, UpdateRequest model)
   {
     var user = getUser(id);
-
-    // Validates and checks if email already exists
-    if (user.Username != model.Username && _context.Users.Any(user => user.Username == model.Username))
-      throw new AppException($"Email '{model.Username}' is already registered");
 
     // Hashes the password if provided
     if (!string.IsNullOrEmpty(model.Password))

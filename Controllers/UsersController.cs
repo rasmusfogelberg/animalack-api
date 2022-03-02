@@ -10,7 +10,7 @@ using AnimalackApi.Models.Users;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UsersController : ControllerBase
+public class UsersController : AbstractController
 {
   private readonly IUserService _userService;
 
@@ -54,9 +54,8 @@ public class UsersController : ControllerBase
   [HttpPut("{id}")]
   public ActionResult<UserResponse> UpdateUser(int id, UpdateRequest model)
   {
-    // Find out how I get user.Id
-    // if (id != User.Id) return Unauthorized(new { message = "Unauthorized"});
-
+      
+    if (AuthenticatedUser == null || id != AuthenticatedUser.Id) return Unauthorized(new { message = "Unauthorized"});
 
     var user = _userService.UpdateById(id, model);
 

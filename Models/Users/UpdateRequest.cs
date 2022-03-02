@@ -8,16 +8,9 @@ public class UpdateRequest
 {
   private string _password;
   private string _confirmPassword;
-  private string _username;
   public string FirstName { get; set; }
   public string LastName { get; set; }
 
-  [EmailAddress]
-  public string Username
-  {
-    get => _username;
-    set => _username = replaceEmptyWithNull(value);
-  }
   public string Password
   {
     get => _password;

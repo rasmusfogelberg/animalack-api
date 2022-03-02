@@ -1,4 +1,5 @@
 using AnimalackApi.Helpers;
+using AnimalackApi.Helpers.JWT;
 using AnimalackApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
   services.AddEndpointsApiExplorer();
 
   services.AddScoped<IUserService, UserService>();
+  services.AddScoped<IJWTUtils, JWTUtils>();
 }
 
 var app = builder.Build();
@@ -29,6 +31,7 @@ if (app.Environment.IsDevelopment())
 
 // global error handler
 app.UseMiddleware<GlobalErrorHandlerMiddleware>();
+app.UseMiddleware<JWTMiddleware>();
 
 app.UseHttpsRedirection();
 

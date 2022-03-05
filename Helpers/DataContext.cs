@@ -6,6 +6,8 @@ namespace AnimalackApi.Helpers;
 public class DataContext : DbContext
 {
   public DbSet<User> Users { get; set; }
+  public DbSet<Pet> Pets { get; set; }
+  
   private readonly IConfiguration Configuration;
 
   public DataContext(IConfiguration configuration)

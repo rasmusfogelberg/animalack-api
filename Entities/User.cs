@@ -7,4 +7,5 @@ public class User
   public string LastName { get; set; }
   public string Username { get; set; }
   public string PasswordHash { get; set; }
+  public ICollection<Pet> Pets { get; set; }
 }

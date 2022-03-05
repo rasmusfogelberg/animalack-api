@@ -4,6 +4,7 @@ using AnimalackApi.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace animalackapi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220305142829_PetAdded")]
+    partial class PetAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,11 +26,11 @@ namespace animalackapi.Migrations
 
             modelBuilder.Entity("AnimalackApi.Entities.Pet", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("PetId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PetId"), 1L, 1);
 
                     b.Property<string>("Breed")
                         .HasColumnType("nvarchar(max)");
@@ -45,7 +47,7 @@ namespace animalackapi.Migrations
                     b.Property<string>("Specie")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("PetId");
 
                     b.ToTable("Pets");
                 });
@@ -77,13 +79,13 @@ namespace animalackapi.Migrations
 
             modelBuilder.Entity("PetUser", b =>
                 {
-                    b.Property<int>("PetsId")
+                    b.Property<int>("PetsPetId")
                         .HasColumnType("int");
 
                     b.Property<int>("UsersId")
                         .HasColumnType("int");
 
-                    b.HasKey("PetsId", "UsersId");
+                    b.HasKey("PetsPetId", "UsersId");
 
                     b.HasIndex("UsersId");
 
@@ -94,7 +96,7 @@ namespace animalackapi.Migrations
                 {
                     b.HasOne("AnimalackApi.Entities.Pet", null)
                         .WithMany()
-                        .HasForeignKey("PetsId")
+                        .HasForeignKey("PetsPetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using AnimalackApi.Entities;
 
 namespace AnimalackApi.Models.Users;
 
@@ -15,4 +16,5 @@ public class RegisterRequest
   [Required]
   [Compare("Password")]
   public string ConfirmPassword { get; set; }
+  public List<Pet> Pets { get; set; }
 }

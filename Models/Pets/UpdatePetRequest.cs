@@ -1,8 +1,11 @@
-namespace AnimalackApi.Entities;
 
-public class Pet
+namespace AnimalackApi.Models.Pets;
+
+using System.ComponentModel.DataAnnotations;
+using AnimalackApi.Entities;
+
+public class UpdatePetRequest
 {
-  public int Id { get; set; }
   public User User { get; set; }
   public string Name { get; set; }
   public string Specie { get; set; }

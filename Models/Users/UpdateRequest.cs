@@ -10,6 +10,7 @@ public class UpdateRequest
   private string _confirmPassword;
   public string FirstName { get; set; }
   public string LastName { get; set; }
+  public List<Pet> Pets { get; set; }
 
   public string Password
   {

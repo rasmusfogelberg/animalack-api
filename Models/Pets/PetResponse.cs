@@ -1,6 +1,8 @@
-namespace AnimalackApi.Entities;
+namespace AnimalackApi.Models.Pets;
 
-public class Pet
+using AnimalackApi.Entities;
+
+public class PetResponse
 {
   public int Id { get; set; }
   public User User { get; set; }

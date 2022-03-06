@@ -1,108 +1,70 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+namespace AnimalackApi.Controllers;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using AnimalackApi.Entities;
 using AnimalackApi.Helpers;
+using AnimalackApi.Services;
+using AnimalackApi.Models.Pets;
 
-namespace animalack_api.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class PetsController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PetsController : ControllerBase
+  private readonly IPetService _petService;
+
+  public PetsController(IPetService petService)
+  {
+    _petService = petService;
+  }
+
+  // Get all Pets
+  [HttpGet]
+  public ActionResult<IEnumerable<Pet>> GetPets()
+  {
+    var pets = _petService.GetAll();
+    return Ok(pets);
+  }
+
+  // Get a single Pet
+  [HttpGet("{id}")]
+  public ActionResult<Pet> GetPet(int id)
+  {
+    var pet = _petService.GetById(id);
+
+    if (pet == null)
     {
-        private readonly DataContext _context;
-
-        public PetsController(DataContext context)
-        {
-            _context = context;
-        }
-
-        // GET: api/Pets
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Pet>>> GetPets()
-        {
-            return await _context.Pets.ToListAsync();
-        }
-
-        // GET: api/Pets/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Pet>> GetPet(int id)
-        {
-            var pet = await _context.Pets.FindAsync(id);
-
-            if (pet == null)
-            {
-                return NotFound();
-            }
-
-            return pet;
-        }
-
-        // PUT: api/Pets/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPet(int id, Pet pet)
-        {
-            if (id != pet.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(pet).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PetExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Pets
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Pet>> PostPet(Pet pet)
-        {
-            _context.Pets.Add(pet);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetPet", new { id = pet.Id }, pet);
-        }
-
-        // DELETE: api/Pets/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePet(int id)
-        {
-            var pet = await _context.Pets.FindAsync(id);
-            if (pet == null)
-            {
-                return NotFound();
-            }
-
-            _context.Pets.Remove(pet);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool PetExists(int id)
-        {
-            return _context.Pets.Any(e => e.Id == id);
-        }
+      return NotFound();
     }
+
+    return Ok(pet);
+  }
+
+  // Edit a pet
+  [HttpPut("{id}")]
+  public ActionResult<PetResponse> UpdatePet(int id, PetResponse model)
+  {
+    var pet = _petService.UpdateById(id, model);
+
+    return Ok(new { message = "Pet successfully updated!" });
+  }
+
+  // Register a new Pet
+  [HttpPost("register")]
+  public ActionResult<Pet> Register(RegisterPetRequest model)
+  {
+    _petService.RegisterPet(model, Request.Headers["origin"]);
+
+    return Ok(new { message = "Pet successfully registered!" });
+  }
+
+  // Delete a specific Pet
+  [HttpDelete("{id}")]
+  public IActionResult DeletePet(int id)
+  {
+    _petService.DeleteById(id);
+
+    return Ok(new { message = "Pet successfully deleted!" });
+  }
 }

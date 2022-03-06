@@ -45,7 +45,12 @@ namespace animalackapi.Migrations
                     b.Property<string>("Specie")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Pets");
                 });
@@ -75,34 +80,18 @@ namespace animalackapi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PetUser", b =>
+            modelBuilder.Entity("AnimalackApi.Entities.Pet", b =>
                 {
-                    b.Property<int>("PetsId")
-                        .HasColumnType("int");
+                    b.HasOne("AnimalackApi.Entities.User", "User")
+                        .WithMany("Pets")
+                        .HasForeignKey("UserId");
 
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PetsId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("PetUser");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PetUser", b =>
+            modelBuilder.Entity("AnimalackApi.Entities.User", b =>
                 {
-                    b.HasOne("AnimalackApi.Entities.Pet", null)
-                        .WithMany()
-                        .HasForeignKey("PetsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AnimalackApi.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Pets");
                 });
 #pragma warning restore 612, 618
         }

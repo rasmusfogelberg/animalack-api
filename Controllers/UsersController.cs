@@ -28,7 +28,7 @@ public class UsersController : AbstractController
     return Ok(response);
   }
 
-  // Get all users
+  // Get all Users
   [HttpGet]
   public ActionResult<IEnumerable<User>> GetUsers()
   {
@@ -36,7 +36,7 @@ public class UsersController : AbstractController
     return Ok(users);
   }
 
-  // Get a single user
+  // Get a single User
   [HttpGet("{id}")]
   public ActionResult<User> GetUser(int id)
   {
@@ -50,7 +50,7 @@ public class UsersController : AbstractController
     return Ok(user);
   }
 
-  // Edit a user
+  // Edit a User
   [HttpPut("{id}")]
   public ActionResult<UserResponse> UpdateUser(int id, UpdateRequest model)
   {
@@ -62,7 +62,7 @@ public class UsersController : AbstractController
     return Ok(new { message = "User successfully updated!" });
   }
 
-  // Register a user
+  // Register a User
   [HttpPost("register")]
   public IActionResult Register(RegisterRequest model)
   {
@@ -75,24 +75,9 @@ public class UsersController : AbstractController
   [HttpDelete("{id}")]
   public IActionResult DeleteUser(int id)
   {
-    // Used to have `var user` infront of this line. Did not work with void
     _userService.DeleteById(id);
-
-    // How can I do a check if there is a user on the specific id? Or do I even need it 
-    // since there is a check in the "getUser" and "DeleteById" methods in UserService class?
-    /*    if (user == null)
-       {
-         return NotFound();
-       } */
 
     return Ok(new { message = "User successfully deleted!" });
   }
-
-
-  /*
-    private bool UserExists(int id)
-    {
-      return _context.Users.Any(e => e.Id == id);
-    } */
 }
 

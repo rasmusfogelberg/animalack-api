@@ -18,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 
   services.AddScoped<IUserService, UserService>();
   services.AddScoped<IJWTUtils, JWTUtils>();
+  services.AddScoped<IPetService, PetService>();
 }
 
 var app = builder.Build();

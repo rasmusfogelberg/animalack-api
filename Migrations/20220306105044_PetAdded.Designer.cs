@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace animalackapi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220305142829_PetAdded")]
+    [Migration("20220306105044_PetAdded")]
     partial class PetAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,11 +26,11 @@ namespace animalackapi.Migrations
 
             modelBuilder.Entity("AnimalackApi.Entities.Pet", b =>
                 {
-                    b.Property<int>("PetId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PetId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Breed")
                         .HasColumnType("nvarchar(max)");
@@ -47,7 +47,12 @@ namespace animalackapi.Migrations
                     b.Property<string>("Specie")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("PetId");
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Pets");
                 });
@@ -77,34 +82,18 @@ namespace animalackapi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("PetUser", b =>
+            modelBuilder.Entity("AnimalackApi.Entities.Pet", b =>
                 {
-                    b.Property<int>("PetsPetId")
-                        .HasColumnType("int");
+                    b.HasOne("AnimalackApi.Entities.User", "User")
+                        .WithMany("Pets")
+                        .HasForeignKey("UserId");
 
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PetsPetId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("PetUser");
+                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PetUser", b =>
+            modelBuilder.Entity("AnimalackApi.Entities.User", b =>
                 {
-                    b.HasOne("AnimalackApi.Entities.Pet", null)
-                        .WithMany()
-                        .HasForeignKey("PetsPetId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AnimalackApi.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Pets");
                 });
 #pragma warning restore 612, 618
         }

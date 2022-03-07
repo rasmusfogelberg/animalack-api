@@ -7,6 +7,7 @@ public class DataContext : DbContext
 {
   public DbSet<User> Users { get; set; }
   public DbSet<Pet> Pets { get; set; }
+  public DbSet<Event> Events { get; set; }
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -34,5 +35,6 @@ public class DataContext : DbContext
   {
     options.UseSqlServer(Configuration.GetConnectionString("AnimalackApiDatabase"));
   }
+  public DbSet<AnimalackApi.Entities.Event> Event { get; set; }
 
 }

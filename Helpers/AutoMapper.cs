@@ -2,6 +2,7 @@ using AutoMapper;
 
 using AnimalackApi.Models.Users;
 using AnimalackApi.Models.Pets;
+using AnimalackApi.Models.Events;
 using AnimalackApi.Entities;
 
 namespace AnimalackApi.Helpers;
@@ -17,7 +18,7 @@ public class AutoMapper : Profile
     CreateMap<User, AuthResponse>();
 
     CreateMap<RegisterPetRequest, Pet>()
-      .ForMember(destination => destination.Gender, 
+      .ForMember(destination => destination.Gender,
       options => options.MapFrom(source => (PetGender)source.Gender));
 
     CreateMap<UpdatePetRequest, Pet>();
@@ -25,5 +26,11 @@ public class AutoMapper : Profile
     CreateMap<Pet, RegisterPetResponse>();
     CreateMap<Pet, PetResponse>();
     CreateMap<Pet, SinglePetResponse>();
+
+    CreateMap<Event, AddEventRequest>();
+    CreateMap<UpdateEventRequest, Event>();
+    CreateMap<Event, AddEventResponse>();
+    CreateMap<Event, EventResponse>();
+    CreateMap<Event, SingleEventResponse>();
   }
 }

@@ -1,15 +1,14 @@
+using System.Text.Json.Serialization;
 using AnimalackApi.Entities;
-using Newtonsoft.Json;
 
 namespace AnimalackApi.Models.Users;
 
-public class UserResponse
+public class SingleUserResponse
 {
   public int Id { get; set; }
   public string FirstName { get; set; }
   public string LastName { get; set; }
   public string Username { get; set; }
-
   [JsonIgnore]
   public List<Pet> Pets { get; set; }
 

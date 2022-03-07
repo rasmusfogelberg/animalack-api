@@ -4,6 +4,7 @@ using AnimalackApi.Models.Pets;
 using AutoMapper;
 using AnimalackApi.Helpers.JWT;
 using BCrypt.Net;
+using Microsoft.EntityFrameworkCore;
 
 namespace AnimalackApi.Services;
 
@@ -11,8 +12,8 @@ public interface IPetService
 {
   void RegisterPet(RegisterPetRequest model, string origin);
   IEnumerable<PetResponse> GetAll();
-  PetResponse GetById(int id);
-  PetResponse UpdateById(int id, PetResponse model);
+  SinglePetResponse GetById(int id);
+  SinglePetResponse UpdateById(int id, UpdatePetRequest model);
   void DeleteById(int id);
 }
 
@@ -32,26 +33,48 @@ public class PetService : IPetService
   // Get all Pets
   public IEnumerable<PetResponse> GetAll()
   {
-    var pets = _context.Pets;
+    var pets = _context.Pets.Include(pet => pet.Users);
     return _mapper.Map<IList<PetResponse>>(pets);
   }
 
   // Get a single Pet by id
-  public PetResponse GetById(int id)
+  public SinglePetResponse GetById(int id)
   {
     var pet = getPet(id);
-    return _mapper.Map<PetResponse>(pet);
+    return _mapper.Map<SinglePetResponse>(pet);
   }
 
   public void RegisterPet(RegisterPetRequest model, string origin)
   {
-    var pet = _mapper.Map<Pet>(model);
+    List<User> users = new List<User>();
+
+    foreach (int userId in model.Users)
+    {
+      users.AddRange(_context.Users.Where(u => u.Id == userId).ToList());
+    }
+
+    if (users == null || users.Count == 0) throw new KeyNotFoundException("No users found matching the passed ids.");
+
+    var pet = new Pet
+    {
+      Users = users,
+      Name = model.Name,
+      Species = model.Species,
+      Breed = model.Breed,
+      Color = model.Color,
+      Gender = model.Gender,
+      DateOfBirth = model.DateOfBirth,
+    };
+
+
+
+    var registerPetResponse = _mapper.Map<RegisterPetResponse>(pet);
 
     _context.Pets.Add(pet);
     _context.SaveChanges();
   }
 
-  public PetResponse UpdateById(int id, PetResponse model)
+  public SinglePetResponse UpdateById(int id, UpdatePetRequest model)
   {
     var pet = getPet(id);
 
@@ -59,7 +82,7 @@ public class PetService : IPetService
     _context.Pets.Update(pet);
     _context.SaveChanges();
 
-    return _mapper.Map<PetResponse>(pet);
+    return _mapper.Map<SinglePetResponse>(pet);
   }
 
   public void DeleteById(int id)
@@ -74,6 +97,8 @@ public class PetService : IPetService
   private Pet getPet(int id)
   {
     var pet = _context.Pets.Find(id);
+
+    /* TODO: Figure out way to populate the Users */
 
     if (pet == null) throw new KeyNotFoundException("Pet not found");
 

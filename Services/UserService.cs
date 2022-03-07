@@ -15,8 +15,8 @@ public interface IUserService
   AuthResponse Authenticate(AuthRequest model);
   void Register(RegisterRequest model, string origin);
   IEnumerable<UserResponse> GetAll();
-  UserResponse GetById(int id);
-  UserResponse UpdateById(int id, UpdateRequest model);
+  SingleUserResponse GetById(int id);
+  SingleUserResponse UpdateById(int id, UpdateRequest model);
   void DeleteById(int id);
 }
 
@@ -61,10 +61,10 @@ public class UserService : IUserService
   }
 
   // Get single User by id
-  public UserResponse GetById(int id)
+  public SingleUserResponse GetById(int id)
   {
     var user = getUser(id);
-    return _mapper.Map<UserResponse>(user);
+    return _mapper.Map<SingleUserResponse>(user);
   }
 
   // Register a User
@@ -91,7 +91,7 @@ public class UserService : IUserService
   }
 
   // Update a User
-  public UserResponse UpdateById(int id, UpdateRequest model)
+  public SingleUserResponse UpdateById(int id, UpdateRequest model)
   {
     var user = getUser(id);
 
@@ -104,7 +104,7 @@ public class UserService : IUserService
     _context.Users.Update(user);
     _context.SaveChanges();
 
-    return _mapper.Map<UserResponse>(user);
+    return _mapper.Map<SingleUserResponse>(user);
   }
 
   // Delete a User

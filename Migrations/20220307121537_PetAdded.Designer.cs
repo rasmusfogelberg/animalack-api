@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace animalackapi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220306105044_PetAdded")]
+    [Migration("20220307121537_PetAdded")]
     partial class PetAdded
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,18 +41,17 @@ namespace animalackapi.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Specie")
+                    b.Property<string>("Species")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Pets");
                 });
@@ -82,18 +81,34 @@ namespace animalackapi.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("AnimalackApi.Entities.Pet", b =>
+            modelBuilder.Entity("PetUser", b =>
                 {
-                    b.HasOne("AnimalackApi.Entities.User", "User")
-                        .WithMany("Pets")
-                        .HasForeignKey("UserId");
+                    b.Property<int>("PetsId")
+                        .HasColumnType("int");
 
-                    b.Navigation("User");
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PetsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("PetUser");
                 });
 
-            modelBuilder.Entity("AnimalackApi.Entities.User", b =>
+            modelBuilder.Entity("PetUser", b =>
                 {
-                    b.Navigation("Pets");
+                    b.HasOne("AnimalackApi.Entities.Pet", null)
+                        .WithMany()
+                        .HasForeignKey("PetsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AnimalackApi.Entities.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

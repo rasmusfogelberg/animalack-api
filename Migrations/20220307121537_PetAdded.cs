@@ -18,31 +18,53 @@ namespace animalackapi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Specie = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Species = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Breed = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Color = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pets", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PetUser",
+                columns: table => new
+                {
+                    PetsId = table.Column<int>(type: "int", nullable: false),
+                    UsersId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PetUser", x => new { x.PetsId, x.UsersId });
                     table.ForeignKey(
-                        name: "FK_Pets_Users_UserId",
-                        column: x => x.UserId,
+                        name: "FK_PetUser_Pets_PetsId",
+                        column: x => x.PetsId,
+                        principalTable: "Pets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PetUser_Users_UsersId",
+                        column: x => x.UsersId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pets_UserId",
-                table: "Pets",
-                column: "UserId");
+                name: "IX_PetUser_UsersId",
+                table: "PetUser",
+                column: "UsersId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "PetUser");
+
             migrationBuilder.DropTable(
                 name: "Pets");
 

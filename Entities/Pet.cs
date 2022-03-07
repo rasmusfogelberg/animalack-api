@@ -3,11 +3,13 @@ namespace AnimalackApi.Entities;
 public class Pet
 {
   public int Id { get; set; }
-  public User User { get; set; }
+  public List<User> Users { get; set; }
   public string Name { get; set; }
-  public string Specie { get; set; }
+  public string Species { get; set; }
   public string Breed { get; set; }
   public string Color { get; set; }
-  public enum Gender { Male, Female }
+  public PetGender Gender { get; set; }
   public DateTime DateOfBirth { get; set; }
 }
+
+  public enum PetGender : int { Male = 1, Female = 2 }

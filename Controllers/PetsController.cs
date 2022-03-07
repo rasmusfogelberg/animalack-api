@@ -43,7 +43,7 @@ public class PetsController : ControllerBase
 
   // Edit a pet
   [HttpPut("{id}")]
-  public ActionResult<PetResponse> UpdatePet(int id, PetResponse model)
+  public ActionResult<SinglePetResponse> UpdatePet(int id, UpdatePetRequest model)
   {
     var pet = _petService.UpdateById(id, model);
 

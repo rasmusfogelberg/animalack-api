@@ -11,10 +11,17 @@ public class DataContext : DbContext
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<User>()
-                .HasMany(u => u.Pets);
-    
+      .HasMany(u => u.Pets);
+
     modelBuilder.Entity<Pet>()
-                .HasOne(p => p.User);
+      .HasMany(p => p.Users);
+      
+    modelBuilder.Entity<Pet>()
+      .Property(p => p.Gender)
+      .HasConversion(
+        v => v.ToString(),
+        v => (PetGender)Enum.Parse(typeof(PetGender), v));
+
   }
 
   private readonly IConfiguration Configuration;

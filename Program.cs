@@ -1,6 +1,8 @@
+using System.Text.Json.Serialization;
 using AnimalackApi.Helpers;
 using AnimalackApi.Helpers.JWT;
 using AnimalackApi.Services;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 
   services.AddDbContext<DataContext>();
   services.AddCors();
-  services.AddControllers();
+  services.AddControllers().AddNewtonsoftJson(options =>
+  {
+        options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+  });
   services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
   services.AddSwaggerGen();
   services.AddEndpointsApiExplorer();

@@ -1,21 +1,16 @@
 namespace AnimalackApi.Models.Pets;
 
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using AnimalackApi.Entities;
 
-public class RegisterPetRequest
+public class SinglePetResponse
 {
   public int Id { get; set; }
-  [Required]
-/*   [Column("Owner")] */
-  public List<int> Users { get; set; }
-  [Required]
+  [JsonIgnore]
+  public List<User> Users { get; set; }
   public string Name { get; set; }
-  [Required]
   public string Species { get; set; }
   public string Breed { get; set; }
-  [Required]
   public string Color { get; set; }
   public PetGender Gender { get; set; }
   public DateTime DateOfBirth { get; set; }

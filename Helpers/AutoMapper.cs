@@ -13,10 +13,17 @@ public class AutoMapper : Profile
     CreateMap<RegisterRequest, User>();
     CreateMap<UpdateRequest, User>();
     CreateMap<User, UserResponse>();
+    CreateMap<User, SingleUserResponse>();
     CreateMap<User, AuthResponse>();
 
-    CreateMap<RegisterPetRequest, Pet>();
-    CreateMap<PetResponse, Pet>();
+    CreateMap<RegisterPetRequest, Pet>()
+      .ForMember(destination => destination.Gender, 
+      options => options.MapFrom(source => (PetGender)source.Gender));
+
+    CreateMap<UpdatePetRequest, Pet>();
+
+    CreateMap<Pet, RegisterPetResponse>();
     CreateMap<Pet, PetResponse>();
+    CreateMap<Pet, SinglePetResponse>();
   }
 }

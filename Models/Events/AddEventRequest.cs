@@ -13,7 +13,7 @@ public class AddEventRequest
   // Should this be a enum?
   public string Type { get; set; }
   [Required]
-  public Pet Pet { get; set; }
+  public int Pets { get; set; }
   [Required]
   public DateTime StartsAt { get; set; }
   public DateTime EndsAt { get; set; }

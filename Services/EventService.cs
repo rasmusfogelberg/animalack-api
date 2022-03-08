@@ -46,32 +46,28 @@ public class EventService : IEventService
   // TODO: Look over last how to implement this when I know what is needed
   public void AddEvent(AddEventRequest model, string origin)
   {
-    /*  List<User> users = new List<User>();
+    // Why am I an idiot and makes a list? I CAN NOT add more than 1 pet anyway
+    // redo this so it will only find the animal with the correct id
+     List<Pet> pets = new List<Pet>();
 
-     foreach (int userId in model.Users)
+  /*    foreach (int petId in model.Pets)
+    {
+      pets.AddRange(_context.Pets.Where(p => p.Id == petId).ToList());
+    } */
+
+     var @event = new Event
      {
-       users.AddRange(_context.Users.Where(u => u.Id == userId).ToList());
-     }
-
-     if (users == null || users.Count == 0) throw new KeyNotFoundException("No users found matching the passed ids.");
-
-     var pet = new Pet
-     {
-       Users = users,
+       Pets = pets,
        Name = model.Name,
-       Species = model.Species,
-       Breed = model.Breed,
-       Color = model.Color,
-       Gender = model.Gender,
-       DateOfBirth = model.DateOfBirth,
+       Type = model.Type,
+       StartsAt = model.StartsAt,
+       EndsAt = model.EndsAt
      };
 
+     var addEventResponse = _mapper.Map<AddEventResponse>(@event);
 
-
-     var registerPetResponse = _mapper.Map<RegisterPetResponse>(pet);
-
-     _context.Pets.Add(pet);
-     _context.SaveChanges(); */
+     _context.Events.Add(@event);
+     _context.SaveChanges();
   }
 
   public SingleEventResponse UpdateById(int id, UpdateEventRequest model)

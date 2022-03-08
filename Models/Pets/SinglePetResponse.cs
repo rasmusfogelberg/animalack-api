@@ -1,13 +1,14 @@
 namespace AnimalackApi.Models.Pets;
 
-using System.Text.Json.Serialization;
+
 using AnimalackApi.Entities;
+using Newtonsoft.Json;
 
 public class SinglePetResponse
 {
   public int Id { get; set; }
-  [JsonIgnore]
-  public List<User> Users { get; set; }
+  /* [JsonIgnore] */
+  public List<int> Users { get; set; }
   public string Name { get; set; }
   public string Species { get; set; }
   public string Breed { get; set; }

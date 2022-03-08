@@ -12,10 +12,12 @@ public class DataContext : DbContext
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.Entity<User>()
-      .HasMany(u => u.Pets);
+      .HasMany(u => u.Pets)
+      .WithMany(u => u.Users)
+      .UsingEntity(j => j.ToTable("UserPets"));
 
-    modelBuilder.Entity<Pet>()
-      .HasMany(p => p.Users);
+/*     modelBuilder.Entity<Pet>()
+      .HasMany(p => p.Users); */
       
     modelBuilder.Entity<Pet>()
       .Property(p => p.Gender)

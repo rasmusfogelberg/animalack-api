@@ -36,6 +36,9 @@ namespace animalackapi.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("PetId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartsAt")
                         .HasColumnType("datetime2");
 
@@ -43,6 +46,8 @@ namespace animalackapi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PetId");
 
                     b.ToTable("Event");
                 });
@@ -64,9 +69,6 @@ namespace animalackapi.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("EventId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -78,8 +80,6 @@ namespace animalackapi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EventId");
 
                     b.ToTable("Pets");
                 });
@@ -124,11 +124,13 @@ namespace animalackapi.Migrations
                     b.ToTable("UserPets", (string)null);
                 });
 
-            modelBuilder.Entity("AnimalackApi.Entities.Pet", b =>
+            modelBuilder.Entity("AnimalackApi.Entities.Event", b =>
                 {
-                    b.HasOne("AnimalackApi.Entities.Event", null)
-                        .WithMany("Pets")
-                        .HasForeignKey("EventId");
+                    b.HasOne("AnimalackApi.Entities.Pet", "Pet")
+                        .WithMany("Events")
+                        .HasForeignKey("PetId");
+
+                    b.Navigation("Pet");
                 });
 
             modelBuilder.Entity("PetUser", b =>
@@ -146,9 +148,9 @@ namespace animalackapi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AnimalackApi.Entities.Event", b =>
+            modelBuilder.Entity("AnimalackApi.Entities.Pet", b =>
                 {
-                    b.Navigation("Pets");
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }

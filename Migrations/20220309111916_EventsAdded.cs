@@ -30,12 +30,6 @@ namespace animalackapi.Migrations
                 table: "UserPets",
                 newName: "IX_UserPets_UsersId");
 
-            migrationBuilder.AddColumn<int>(
-                name: "EventId",
-                table: "Pets",
-                type: "int",
-                nullable: true);
-
             migrationBuilder.AddPrimaryKey(
                 name: "PK_UserPets",
                 table: "UserPets",
@@ -49,25 +43,24 @@ namespace animalackapi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PetId = table.Column<int>(type: "int", nullable: true),
                     StartsAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndsAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Event", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Event_Pets_PetId",
+                        column: x => x.PetId,
+                        principalTable: "Pets",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pets_EventId",
-                table: "Pets",
-                column: "EventId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Pets_Event_EventId",
-                table: "Pets",
-                column: "EventId",
-                principalTable: "Event",
-                principalColumn: "Id");
+                name: "IX_Event_PetId",
+                table: "Event",
+                column: "PetId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_UserPets_Pets_PetsId",
@@ -89,10 +82,6 @@ namespace animalackapi.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Pets_Event_EventId",
-                table: "Pets");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_UserPets_Pets_PetsId",
                 table: "UserPets");
 
@@ -103,17 +92,9 @@ namespace animalackapi.Migrations
             migrationBuilder.DropTable(
                 name: "Event");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Pets_EventId",
-                table: "Pets");
-
             migrationBuilder.DropPrimaryKey(
                 name: "PK_UserPets",
                 table: "UserPets");
-
-            migrationBuilder.DropColumn(
-                name: "EventId",
-                table: "Pets");
 
             migrationBuilder.RenameTable(
                 name: "UserPets",

@@ -9,11 +9,9 @@ public class AddEventRequest
   public int Id { get; set; }
   [Required]
   public string Name { get; set; }
-
-  // Should this be a enum?
   public string Type { get; set; }
   [Required]
-  public int Pets { get; set; }
+  public int Pet { get; set; }
   [Required]
   public DateTime StartsAt { get; set; }
   public DateTime EndsAt { get; set; }

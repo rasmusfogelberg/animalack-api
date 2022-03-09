@@ -27,10 +27,10 @@ public class AutoMapper : Profile
     CreateMap<Pet, PetResponse>();
     CreateMap<Pet, SinglePetResponse>();
 
+    CreateMap<Event, AddEventResponse>();
+    CreateMap<Event, SingleEventResponse>();
     CreateMap<Event, AddEventRequest>();
     CreateMap<UpdateEventRequest, Event>();
-    CreateMap<Event, AddEventResponse>();
     CreateMap<Event, EventResponse>();
-    CreateMap<Event, SingleEventResponse>();
   }
 }

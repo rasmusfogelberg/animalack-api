@@ -25,6 +25,10 @@ public class DataContext : DbContext
         v => v.ToString(),
         v => (PetGender)Enum.Parse(typeof(PetGender), v));
 
+    modelBuilder.Entity<Pet>()
+    .HasMany(p => p.Events)
+    .WithOne(e => e.Pet);
+
   }
 
   private readonly IConfiguration Configuration;

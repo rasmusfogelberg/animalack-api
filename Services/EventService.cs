@@ -31,8 +31,9 @@ public class EventService : IEventService
   // Get all Events
   public IEnumerable<EventResponse> GetAll()
   {
-    // TODO: Include Pets and extend to users so they can be listed with the Event
     var events = _context.Events;
+    _context.Events.Include(e => e.Pet).ToList();
+
     return _mapper.Map<IList<EventResponse>>(events);
   }
 
@@ -43,31 +44,24 @@ public class EventService : IEventService
     return _mapper.Map<SingleEventResponse>(@event);
   }
 
-  // TODO: Look over last how to implement this when I know what is needed
   public void AddEvent(AddEventRequest model, string origin)
   {
-    // Why am I an idiot and makes a list? I CAN NOT add more than 1 pet anyway
-    // redo this so it will only find the animal with the correct id
-     List<Pet> pets = new List<Pet>();
 
-  /*    foreach (int petId in model.Pets)
+    var pet = _context.Pets.Find(model.Pet);
+    if (pet == null) throw new KeyNotFoundException("Pet not found");
+
+
+    var @event = new Event
     {
-      pets.AddRange(_context.Pets.Where(p => p.Id == petId).ToList());
-    } */
+      Pet = pet,
+      Name = model.Name,
+      Type = model.Type,
+      StartsAt = model.StartsAt,
+      EndsAt = model.EndsAt
+    };
 
-     var @event = new Event
-     {
-       Pets = pets,
-       Name = model.Name,
-       Type = model.Type,
-       StartsAt = model.StartsAt,
-       EndsAt = model.EndsAt
-     };
-
-     var addEventResponse = _mapper.Map<AddEventResponse>(@event);
-
-     _context.Events.Add(@event);
-     _context.SaveChanges();
+    _context.Events.Add(@event);
+    _context.SaveChanges();
   }
 
   public SingleEventResponse UpdateById(int id, UpdateEventRequest model)
@@ -93,6 +87,7 @@ public class EventService : IEventService
   private Event getEvent(int id)
   {
     var @event = _context.Events.Find(id);
+    _context.Events.Include(e => e.Pet).ToList();
 
     if (@event == null) throw new KeyNotFoundException("Event not found");
 

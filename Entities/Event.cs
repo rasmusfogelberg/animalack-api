@@ -6,7 +6,7 @@ public class Event {
 
   // Should this be a enum?
   public string Type { get; set; }
-  public List<Pet> Pets { get; set; }
+  public Pet Pet { get; set; }
   public DateTime StartsAt { get; set; }
   public DateTime EndsAt { get; set; }
 }

@@ -10,7 +10,7 @@ public class Pet
   public string Color { get; set; }
   public PetGender Gender { get; set; }
   public DateTime DateOfBirth { get; set; }
-  /* public List<Event> Events { get; set; } */
+  public List<Event> Events { get; set; }
 }
 
 public enum PetGender : int { Male = 1, Female = 2 }

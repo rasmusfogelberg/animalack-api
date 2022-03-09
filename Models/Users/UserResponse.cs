@@ -9,9 +9,4 @@ public class UserResponse
   public string FirstName { get; set; }
   public string LastName { get; set; }
   public string Username { get; set; }
-
-  [JsonIgnore]
-  public List<Pet> Pets { get; set; }
-
-  // TODO: Add Role, CreatedAt, UpdatedAt
 }

@@ -4,6 +4,7 @@ using AnimalackApi.Helpers.JWT;
 using AnimalackApi.Models.Users;
 using AutoMapper;
 using BCrypt.Net;
+using Microsoft.EntityFrameworkCore;
 
 namespace AnimalackApi.Services;
 
@@ -121,6 +122,7 @@ public class UserService : IUserService
   private User getUser(int id)
   {
     var user = _context.Users.Find(id);
+    _context.Users.Include(user => user.Pets).ToList();
 
     if (user == null) throw new KeyNotFoundException("User not found");
 

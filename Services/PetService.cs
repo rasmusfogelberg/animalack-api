@@ -66,10 +66,6 @@ public class PetService : IPetService
       DateOfBirth = model.DateOfBirth,
     };
 
-
-
-    var registerPetResponse = _mapper.Map<RegisterPetResponse>(pet);
-
     _context.Pets.Add(pet);
     _context.SaveChanges();
   }
@@ -96,31 +92,11 @@ public class PetService : IPetService
   /* Helper methods */
   private Pet getPet(int id)
   {
-    var pet = _context.Pets.Include(pet => pet.Users).Where(pet => pet.Id == id);
-
-    var singlePetResponse = _mapper.Map<SinglePetResponse>(pet);
-
-    /* TODO: Figure out way to populate the Users */
-    List<User> users = new List<User>();
-    foreach (int userId in singlePetResponse.Users)
-    {
-      users.AddRange(_context.Users.Where(u => u.Id == userId).ToList());
-    }
-
-    var petReturn = new Pet
-    {
-      Users = users,
-      Name = singlePetResponse.Name,
-      Species = singlePetResponse.Species,
-      Breed = singlePetResponse.Breed,
-      Color = singlePetResponse.Color,
-      Gender = singlePetResponse.Gender,
-      DateOfBirth = singlePetResponse.DateOfBirth,
-    };
-
+    var pet = _context.Pets.Find(id);
+    _context.Pets.Include(pet => pet.Users).ToList();
 
     if (pet == null) throw new KeyNotFoundException("Pet not found");
 
-    return petReturn;
+    return pet;
   }
 }

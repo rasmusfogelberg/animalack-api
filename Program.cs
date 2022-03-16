@@ -40,6 +40,12 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<GlobalErrorHandlerMiddleware>();
 app.UseMiddleware<JWTMiddleware>();
 
+ app.UseCors(x => x
+        .SetIsOriginAllowed(origin => true)
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .AllowCredentials());
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

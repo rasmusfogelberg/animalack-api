@@ -44,6 +44,7 @@ public class PetService : IPetService
     return _mapper.Map<SinglePetResponse>(pet);
   }
 
+  // Register a Pet
   public void RegisterPet(RegisterPetRequest model, string origin)
   {
     List<User> users = new List<User>();
@@ -81,6 +82,7 @@ public class PetService : IPetService
     return _mapper.Map<SinglePetResponse>(pet);
   }
 
+  // Delete a Pet
   public void DeleteById(int id)
   {
     var pet = getPet(id);
@@ -90,6 +92,8 @@ public class PetService : IPetService
   }
 
   /* Helper methods */
+
+  // Get a single Pet by id
   private Pet getPet(int id)
   {
     var pet = _context.Pets.Find(id);

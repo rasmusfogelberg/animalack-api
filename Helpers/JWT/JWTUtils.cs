@@ -21,7 +21,7 @@ public class JWTUtils : IJWTUtils
   public string GenerateToken(User user)
   {
     var handler = new JwtSecurityTokenHandler();
-    // TODO: Add to appsettings
+
     var key = Encoding.ASCII.GetBytes("IamASuperSecretString");
     var tokenDescription = new SecurityTokenDescriptor
     {
@@ -40,7 +40,7 @@ public class JWTUtils : IJWTUtils
     if (token == null) return null;
 
     var handler = new JwtSecurityTokenHandler();
-    // TODO: Add to appsettings
+    
     var key = Encoding.ASCII.GetBytes("IamASuperSecretString");
     try
     {

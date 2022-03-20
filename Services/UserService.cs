@@ -119,6 +119,8 @@ public class UserService : IUserService
   }
 
   /* Helper methods */
+
+  // Get a single User by id
   private User getUser(int id)
   {
     var user = _context.Users.Find(id);

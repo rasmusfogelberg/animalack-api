@@ -44,6 +44,7 @@ public class EventService : IEventService
     return _mapper.Map<SingleEventResponse>(@event);
   }
 
+  // Add Event
   public void AddEvent(AddEventRequest model, string origin)
   {
 
@@ -64,6 +65,7 @@ public class EventService : IEventService
     _context.SaveChanges();
   }
 
+  // Update single Event
   public SingleEventResponse UpdateById(int id, UpdateEventRequest model)
   {
     var @event = getEvent(id);
@@ -75,6 +77,7 @@ public class EventService : IEventService
     return _mapper.Map<SingleEventResponse>(@event);
   }
 
+  // Delete an Event
   public void DeleteById(int id)
   {
     var @event = getEvent(id);
@@ -84,6 +87,8 @@ public class EventService : IEventService
   }
 
   /* Helper methods */
+
+  // Get an Event by id
   private Event getEvent(int id)
   {
     var @event = _context.Events.Find(id);

@@ -8,7 +8,6 @@ public class RegisterPetRequest
 {
   public int Id { get; set; }
   [Required]
-/*   [Column("Owner")] */
   public List<int> Users { get; set; }
   [Required]
   public string Name { get; set; }
